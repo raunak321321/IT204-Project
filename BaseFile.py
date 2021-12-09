@@ -2,7 +2,6 @@ import cv2
 import numpy as np 
 import face_recognition
 
-
 # this is step1
 imgElon = face_recognition.load_image_file('ImageBasic/Elon Musk.jpeg') # take image in bgr form
 imgElon = cv2.cvtColor(imgElon,cv2.COLOR_BGR2RGB);
@@ -37,6 +36,6 @@ cv2.putText(img2Test,f'{results2} {round(faceDis2[0],2)}',(50,50),cv2.FONT_HERSH
 
 cv2.imshow('Elon Musk',imgElon) # this will show the image of the elon musk
 cv2.imshow('Elon Test',imgTest) # this will show the image of the elon test
-cv2.imshow('i',img2Test) # this will show the image of the elon test
+cv2.imshow('unknown',img2Test) # this will show the image of the elon test
 cv2.waitKey(0)
 
