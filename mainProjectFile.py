@@ -16,10 +16,12 @@ for im in myList:
 
 # print(imageName)
 # print(images)
+
+
 def findEncodings(imagess):
     encodeList = []
     for img in imagess:
-        currImg = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+        currImg = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         encode = face_recognition.face_encodings(currImg)[0]
         encodeList.append(encode)
     return encodeList
@@ -28,22 +30,23 @@ def findEncodings(imagess):
 encodeListKnown = findEncodings(images)
 # print(len(encodeListKnown))
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 while True:
-    success,img = cap.read()
-    imgS = cv2.resize(img,(0,0),None,0.25,0.25) # image,pixelSize,,Scales
-    imgS = cv2.cvtColor(imgS,cv2.COLOR_BGR2RGB)
+    success, img = cap.read()
+    imgS = cv2.resize(img, (0, 0), None, 1, 1)  # image,pixelSize,,Scales
+    imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
 
     facesCurrFrame = face_recognition.face_locations(imgS)
-    encodingsCurrFrame = face_recognition.face_encodings(imgS,facesCurrFrame)
-    
-    for encodingFace,faceLoc in zip(encodingsCurrFrame,facesCurrFrame):
-        matches = face_recognition.compare_faces(encodeListKnown,encodingFace)
-        faceDis = face_recognition.face_distance(encodeListKnown,encodingFace)
+    encodingsCurrFrame = face_recognition.face_encodings(imgS, facesCurrFrame)
+
+    for encodingFace, faceLoc in zip(encodingsCurrFrame, facesCurrFrame):
+        matches = face_recognition.compare_faces(encodeListKnown, encodingFace)
+        faceDis = face_recognition.face_distance(encodeListKnown, encodingFace)
 
         matchIndex = np.argmin(faceDis)
         if(matches[matchIndex]):
-            name = imageName[matchIndex].upper()    
+            name = imageName[matchIndex].upper()
             print(name)
+    # cv2.imshow('capture', img)
     print()
