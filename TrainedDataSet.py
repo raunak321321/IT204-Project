@@ -7,13 +7,14 @@ from PIL import Image, ImageTk
 import pickle
 from datetime import datetime
 
+# take help of library to make program interactive
 window = tk.Tk()
 window.title("Face Recognition- GRP(30)")
 window.geometry('900x450')
 window.configure()
 
 
-def training():
+def training(): # trained all the images present in the dataSet
     path = 'dataset'
     images = []  # store all the images present inside the path
     imageName = []  # store the names of all those images
@@ -24,14 +25,14 @@ def training():
         curImg = cv2.imread(f'{path}/{im}')
         images.append(curImg)
         imageName.append(os.path.splitext(im)[0])
-    with open("Trained_Image.txt", "wb") as fp:  # Pickling
+    with open("Trained_Image.txt", "wb") as fp:  # Pickling --> just dump list into the file
         pickle.dump(images, fp)
     fp.close()
     with open("Trained_ImageName.txt", "wb") as fp:  # Pickling
         pickle.dump(imageName, fp)
     fp.close()
 
-    def findEncodings(imagess):
+    def findEncodings(imagess): # fetch some information from image
         encodeList = []
         # count = 0
         for img in imagess:
@@ -46,35 +47,14 @@ def training():
     with open("Trained_Encodings.txt", "wb") as fp:  # Pickling
         pickle.dump(encodeListKnown, fp)
     print(len(encodeListKnown))
-# File_object.write(str(images))
-# File_object.close()
 
-# with open("Trained_Image.txt", "rb") as fp:  # Pickling
-#     images = pickle.load(fp)
-# # print(images)
-
-
-def take_img():
+def take_img(): # take image from camera
     cam = cv2.VideoCapture(0)
-    # detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-    # ID = txt.get()
     Name = txt2.get()
     sampleNum = 0
     while (True):
         ret, img = cam.read()
-        # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        # faces = detector.detectMultiScale(gray, 1.3, 5)
-
-        # for (x, y, w, h) in faces:
-        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        # incrementing sample number
-        # saving the captured face in the dataset folder
         cv2.imwrite("dataset/ " + Name + ".jpg", img)
-        # cv2.imshow('Frame', img)
-        # wait for 100 miliseconds
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
-        # break
-        # break if the sample number is morethan 100
         if sampleNum > 0:
             break
         sampleNum = sampleNum + 1
@@ -102,10 +82,6 @@ window.protocol("WM_DELETE_WINDOW", on_closing)
 Notification = tk.Label(window, text="All things good",
                         bg="Green", fg="white", width=15, height=3)
 
-# lbl = tk.Label(window, text="Enter id", width=20, height=2,
-#                fg="black", font=('times', 20, 'italic bold '))
-# lbl.place(x=200, y=200)
-
 
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
@@ -113,16 +89,12 @@ def testVal(inStr, acttyp):
             return False
     return True
 
-
+# below are some gui implementations
 message = tk.Label(window, text="IT-204 Project Face-Recognition", bg="purple", fg="black", width=50,
                    height=2, font=('times', 20, 'italic bold '))
 
 
 message.place(x=50, y=20)
-
-# txt = tk.Entry(window, validate="key", width=20,  fg="red")
-# txt['validatecommand'] = (txt.register(testVal), '%P', '%d')
-# txt.place(x=550, y=210)
 
 lbl2 = tk.Label(window, text="Name", width=20, fg="black",
                 height=2, font=('times', 20, 'italic bold '))
@@ -140,12 +112,3 @@ trainImg = tk.Button(window, text="Encode and Save Images", fg="white", command=
 trainImg.place(x=500, y=300)
 
 window.mainloop()
-
-# print(imageName)
-
-
-# File_object.write(str(images))
-# File_object.close()
-
-# with open("Trained_ImageName.txt", "rb") as fp:  # Pickling
-#     encodeListKnown = pickle.load(fp)
