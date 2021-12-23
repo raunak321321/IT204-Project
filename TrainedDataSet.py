@@ -46,25 +46,40 @@ def training(): # trained all the images present in the dataSet
 
     with open("Trained_Encodings.txt", "wb") as fp:  # Pickling
         pickle.dump(encodeListKnown, fp)
-    print(len(encodeListKnown))
+    res = "Encodings done!!"
+    Notification.configure(text=res, bg="SpringGreen3",
+                           width=30, font=('times', 13, 'bold'))
+    Notification.place(x=300, y=130)
+    on_closing()
 
 def take_img(): # take image from camera
     cam = cv2.VideoCapture(0)
     Name = txt2.get()
     sampleNum = 0
-    while (True):
+    Id = 1
+    count = 0
+    while (count!=1):
+        with open('IDs.txt','r') as f:
+            lines = str(f.readlines())
+            lines = lines[2:-2]
+            lines = int(lines)
+        f.close()
+        count+=1
+        id = lines
+        Id = id
+        file = open("IDs.txt", "w")
+        id+=1 
+        file.write(str(id))
+        file.close()
         ret, img = cam.read()
-        cv2.imwrite("dataset/ " + Name + ".jpg", img)
-        if sampleNum > 0:
-            break
-        sampleNum = sampleNum + 1
+        cv2.imwrite("dataset/ " + Name + "-" + str(Id) + ".jpg", img)
     cam.release()
     cv2.destroyAllWindows()
 
-    res = "Images Saved  : " + " Name : " + Name
+    res = "Image Saved!!" + " Your id is: " + str(Id)
     Notification.configure(text=res, bg="SpringGreen3",
-                           width=50, font=('times', 18, 'bold'))
-    Notification.place(x=250, y=400)
+                           width=30, font=('times', 13, 'bold'))
+    Notification.place(x=300, y=130)
 
 
 window.grid_rowconfigure(0, weight=1)
@@ -104,11 +119,11 @@ txt2 = tk.Entry(window, width=30, fg="red")
 txt2.place(x=390, y=225)
 
 takeImg = tk.Button(window, text="Take and Save Image", command=take_img, fg="white", bg="blue",
-                    width=20, height=2, activebackground="Red", font=('times', 10, 'italic bold '))
+                    width=20, height=2, activebackground="Red", font=('times', 10, 'italic bold '),background='green')
 takeImg.place(x=250, y=300)
 
 trainImg = tk.Button(window, text="Encode and Save Images", fg="white", command=training, bg="blue",
-                     width=20, height=2, activebackground="Red", font=('times', 10, 'italic bold '))
+                     width=20, height=2, activebackground="Red", font=('times', 10, 'italic bold '),background='green')
 trainImg.place(x=500, y=300)
 
 window.mainloop()
